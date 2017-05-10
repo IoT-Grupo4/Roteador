@@ -1,6 +1,7 @@
 from multiprocessing import Pool
 from sensor import VirtualSensor, Sensor
 from time import sleep
+from controller import OSPFController
 
 
 def check_sensor(sensor):
@@ -14,6 +15,7 @@ def main():
 
     # list of all sensors
     sensors = Sensor.instances
+    controller = OSPFController()
 
     print('Reading result of {} sensors'.format(len(sensors)))
     with Pool() as p:
