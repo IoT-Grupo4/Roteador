@@ -1,5 +1,6 @@
 from multiprocessing import Pool
 from sensor import VirtualSensor, Sensor
+from time import sleep
 
 
 def check_sensor(sensor):
@@ -24,6 +25,7 @@ def main():
             else:
                 print('Everything is OK      ', end='\r')
                 pass  # TODO: coloca prioridade em default
+            sleep(0.1)
 
 if __name__ == '__main__':
     main()
