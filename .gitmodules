@@ -1,0 +1,6 @@
+[submodule "sensor"]
+	path = sensor
+	url = git@github.com:IoT-Grupo4/Dados_Sensores.git
+[submodule "register"]
+	path = register
+	url = git@github.com:IoT-Grupo4/rt-auto-registro.git
