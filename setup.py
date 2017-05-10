@@ -23,7 +23,7 @@ setup(
         'rcontext = main:main',
     ]},
     zip_safe=True,
-    long_description=open('README.md').read(),
+    # long_description=open('README.md').read(),
     install_requires=REQUIREMENTS,
     classifiers=[
         'Environment :: Web Environment',
