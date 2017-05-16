@@ -2,6 +2,9 @@ from multiprocessing import Pool
 from sensor import VirtualSensor, Sensor
 from time import sleep
 from controller import OSPFController
+from sensor.ldr import LDRSensor
+from sensor.dht import DHTSensor
+from sensor.sensorargs import _parser
 
 
 def check_sensor(sensor):
@@ -12,6 +15,12 @@ def main():
 
     # create virtual sensors for test
     sensors_list = [VirtualSensor('{}'.format(x)) for x in range(10)]
+    _options = _parser.parse_args()
+
+    if not _options.dht:
+        dht = DHTSensor(_options.dht_model, _options.dht_pin)
+    if not _options.ldr:
+        ldr = LDRSensor(_options.ldr_pin)
 
     # list of all sensors
     sensors = Sensor.instances
