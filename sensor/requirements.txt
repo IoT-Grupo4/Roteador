@@ -1,0 +1,2 @@
+gpiozero
+-e git://github.com/adafruit/Adafruit_Python_DHT.git#egg=Adafruit_DHT
