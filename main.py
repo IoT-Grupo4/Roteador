@@ -14,8 +14,8 @@ def check_sensor(sensor):
 def main():
 
     # create virtual sensors for test
-    sensors_list = [VirtualSensor('{}'.format(x)) for x in range(10)]
     _options = _parser.parse_args()
+    sensors_list = [VirtualSensor('{}'.format(x)) for x in range(10)]
 
     if not _options.dht:
         dht = DHTSensor(_options.dht_model, _options.dht_pin)
@@ -27,9 +27,9 @@ def main():
     controller = OSPFController()
 
     print('Reading result of {} sensors'.format(len(sensors)))
-    with Pool() as p:
+    with Pool(1) as p:
         while True:
-            result = p.map(check_sensor, sensors)
+            result = [i.is_ok() for i in sensors]
             if False in result:
                 pass  # TODO: altera prioridade
                 print('Not OK                ', end='\r')
