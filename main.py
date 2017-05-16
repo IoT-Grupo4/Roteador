@@ -15,7 +15,7 @@ def main():
 
     # create virtual sensors for test
     _options = _parser.parse_args()
-    sensors_list = [VirtualSensor('{}'.format(x)) for x in range(10)]
+    sensors_list = [VirtualSensor('{}'.format(x)) for x in range(5)]
 
     if not _options.dht:
         dht = DHTSensor(_options.dht_model, _options.dht_pin)
@@ -29,14 +29,15 @@ def main():
     print('Reading result of {} sensors'.format(len(sensors)))
     with Pool(1) as p:
         while True:
-            result = [i.is_ok() for i in sensors]
-            if False in result:
+            # result = [i.is_ok() for i in sensors]
+            result = p.apply_async(check_sensor, sensors)
+            if False in result.get(timeout=10):
                 pass  # TODO: altera prioridade
                 print('Not OK                ', end='\r')
             else:
                 print('Everything is OK      ', end='\r')
                 pass  # TODO: coloca prioridade em default
-            sleep(0.1)
+            sleep(_options.period)
 
 if __name__ == '__main__':
     main()
