@@ -29,9 +29,8 @@ def main():
     print('Reading result of {} sensors'.format(len(sensors)))
     with Pool(1) as p:
         while True:
-            # result = [i.is_ok() for i in sensors]
-            result = p.apply_async(check_sensor, sensors)
-            if False in result.get(timeout=10):
+            result = [i.is_ok() for i in sensors]
+            if False in result:
                 pass  # TODO: altera prioridade
                 print('Not OK                ', end='\r')
             else:
