@@ -1,4 +1,4 @@
-from gpiozero import LightSensor, Buzzer
+# from gpiozero import LightSensor, Buzzer
 from .sensor import Sensor
 
 

@@ -17,10 +17,10 @@ def main():
     _options = _parser.parse_args()
     sensors_list = [VirtualSensor('{}'.format(x)) for x in range(5)]
 
-    if not _options.dht:
-        dht = DHTSensor(_options.dht_model, _options.dht_pin)
-    if not _options.ldr:
-        ldr = LDRSensor(_options.ldr_pin)
+    # if not _options.dht:
+    #     dht = DHTSensor(_options.dht_model, _options.dht_pin)
+    # if not _options.ldr:
+    #     ldr = LDRSensor(_options.ldr_pin)
 
     # list of all sensors
     sensors = Sensor.instances
@@ -33,9 +33,10 @@ def main():
             if False in result:
                 pass  # TODO: altera prioridade
                 print('Not OK                ', end='\r')
+                controller.lower_priority()
             else:
                 print('Everything is OK      ', end='\r')
-                pass  # TODO: coloca prioridade em default
+                controller.raise_priority()
             sleep(_options.period)
 
 if __name__ == '__main__':

@@ -1,7 +1,6 @@
-
 import sys
 import time
-import Adafruit_DHT
+# import Adafruit_DHT
 import csv
 from .sensor import Sensor
 
