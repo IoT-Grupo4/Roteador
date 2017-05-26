@@ -10,22 +10,27 @@ from time import sleep
 
 
 def main():
+
+    # create virtual sensors for test
     _options = _parser.parse_args()
+    sensors_list = [VirtualSensor('{}'.format(x)) for x in range(5)]
 
     if not _options.dht:
         dht = DHTSensor(_options.dht_model, _options.dht_pin)
     if not _options.ldr:
         ldr = LDRSensor(_options.ldr_pin)
 
-    # virtual = VirtualSensor()
-    # virtual1 = VirtualSensor(name='Second')
+    # list of all sensors
+    sensors = Sensor._get_sensors_()
 
-    print('reading...')
+    print('Reading result of {} sensors'.format(len(sensors)))
     while True:
-        for o in gc.get_objects():
-            if isinstance(o, Sensor):
-                # prints all declared sensors
-                print('{}: {}'.format(o.name,  o.read()))
+        result = [i.is_ok() for i in sensors]
+        if False in result:
+            pass  # TODO: altera prioridade
+            print('Not OK                ', end='\r')
+        else:
+            print('Everything is OK      ', end='\r')
         sleep(_options.period)
 
 

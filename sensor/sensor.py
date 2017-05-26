@@ -15,23 +15,23 @@ class NotImplemented(Exception):
 class Sensor(object):
     """docstring for Sensor"""
 
-    instances = []
+    __instances__ = []
 
     def __init__(self, name, log_file=None, verbose=_options.verbose, delimiter=_options.delimiter, root=_options.path):
         super(Sensor, self).__init__()
-        self.__class__.instances.append(weakref.proxy(self))
+        self.__class__.__instances__.append(weakref.proxy(self))
         self.name = name
         if log_file == None:
             log_file = name
         self.log_file = log_file
-        self.delimiter = delimiter
-        self.verbose = verbose
+        self._delimiter_ = delimiter
+        self._verbose_ = verbose
         if root is not None:
-            self.root = root
+            self._root_ = root
         else:
-            self.root = path.dirname(path.abspath(__file__))
+            self._root_ = path.dirname(path.abspath(__file__))
         self.logger = None
-        self.count = 0
+        self._count_ = 0
 
     def read(self):
         value = self.__read__()
@@ -52,20 +52,20 @@ class Sensor(object):
         pass
 
     def log(self, message):
-        if not self.verbose:
+        if not self._verbose_:
             return
         if not self.logger:
             self.__build_logger__()
 
         if (type(message) == list) or (type(message) == tuple):
-            self.logger.info('{},'.format(self.count) +
-                             '{}'.format(self.delimiter).join(
+            self.logger.info('{},'.format(self._count_) +
+                             '{}'.format(self._delimiter_).join(
                                  str(i) for i in message)
                              )
         else:
-            self.logger.info('{},{}'.format(self.count, message))
+            self.logger.info('{},{}'.format(self._count_, message))
 
-        self.count += 1
+        self._count_ += 1
 
     def __read__(self):
         raise NotImplemented('Method for read values not Implemented')
@@ -73,8 +73,9 @@ class Sensor(object):
     def __build_logger__(self):
         """ Method to build the logger's handler """
 
-        makedirs(self.root, exist_ok=True)
-        handler = logging.FileHandler('%s/%s.csv' % (self.root, self.log_file))
+        makedirs(self._root_, exist_ok=True)
+        handler = logging.FileHandler(
+            '%s/%s.csv' % (self._root_, self.log_file))
 
         self.logger = logging.getLogger(self.name)
         self.logger.setLevel(logging.INFO)
@@ -88,6 +89,13 @@ class Sensor(object):
 
     def __str__(self):
         return '{}'.format(self.__read__())
+
+    def __inter__(self):
+        return self.__instances__.__iter__()
+
+    @classmethod
+    def _get_sensors_(cls):
+        return cls.__instances__
 
 
 class VirtualSensor(Sensor):

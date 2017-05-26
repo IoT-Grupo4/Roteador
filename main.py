@@ -7,10 +7,6 @@ from sensor.dht import DHTSensor
 from sensor.sensorargs import _parser
 
 
-def check_sensor(sensor):
-    return sensor.is_ok()
-
-
 def main():
 
     # create virtual sensors for test
@@ -23,21 +19,20 @@ def main():
     #     ldr = LDRSensor(_options.ldr_pin)
 
     # list of all sensors
-    sensors = Sensor.instances
+    sensors = Sensor._get_sensors_()
     controller = OSPFController()
 
     print('Reading result of {} sensors'.format(len(sensors)))
-    with Pool(1) as p:
-        while True:
-            result = [i.is_ok() for i in sensors]
-            if False in result:
-                pass  # TODO: altera prioridade
-                print('Not OK                ', end='\r')
-                controller.lower_priority()
-            else:
-                print('Everything is OK      ', end='\r')
-                controller.raise_priority()
-            sleep(_options.period)
+    while True:
+        result = [i.is_ok() for i in sensors]
+        if False in result:
+            pass  # TODO: altera prioridade
+            print('Not OK                ', end='\r')
+            controller.lower_priority()
+        else:
+            print('Everything is OK      ', end='\r')
+            controller.raise_priority()
+        sleep(_options.period)
 
 if __name__ == '__main__':
     main()
